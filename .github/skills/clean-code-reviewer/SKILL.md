@@ -2,7 +2,7 @@
 description: 'Skill especializada en revisión de código limpio. Detecta violaciones SOLID, funciones largas, nombres confusos, código duplicado y aplica refactoring siguiendo las reglas del lineamiento.'
 ---
 
-# Skill: clean-code-reviewer [BACKEND]
+# Skill: clean-code-reviewer
 
 ## Responsabilidad
 Revisar y refactorizar el código del backend para que cumpla
