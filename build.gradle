@@ -1,0 +1,40 @@
+plugins {
+    id 'java'
+    id 'net.serenity-bdd.serenity-gradle-plugin' version '5.3.4'
+}
+
+group = 'com.ticketsystem'
+version = '1.0.0'
+
+java {
+    sourceCompatibility = JavaVersion.VERSION_11
+    targetCompatibility = JavaVersion.VERSION_11
+}
+
+repositories {
+    mavenCentral()
+}
+
+ext {
+    serenityVersion = '4.1.4'
+    cucumberVersion  = '7.14.0'
+}
+
+dependencies {
+    testImplementation "net.serenity-bdd:serenity-core:${serenityVersion}"
+    testImplementation "net.serenity-bdd:serenity-cucumber:${serenityVersion}"
+    testImplementation "io.cucumber:cucumber-java:${cucumberVersion}"
+    testImplementation "io.cucumber:cucumber-junit:${cucumberVersion}"
+    testImplementation "junit:junit:4.13.2"
+    testImplementation "io.github.bonigarcia:webdrivermanager:5.6.3"
+    testImplementation "org.assertj:assertj-core:3.24.2"
+}
+
+test {
+    useJUnit()
+    testLogging.showStandardStreams = true
+    systemProperties System.properties
+    finalizedBy 'aggregate'
+}
+
+gradle.startParameter.continueOnFailure = true
