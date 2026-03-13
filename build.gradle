@@ -1,6 +1,5 @@
 plugins {
     id 'java'
-    id 'net.serenity-bdd.serenity-gradle-plugin' version '4.1.4'
 }
 
 group = 'com.ticketsystem'
@@ -36,5 +35,4 @@ test {
     systemProperties System.properties
 }
 
-test.finalizedBy(aggregate)
 gradle.startParameter.continueOnFailure = true

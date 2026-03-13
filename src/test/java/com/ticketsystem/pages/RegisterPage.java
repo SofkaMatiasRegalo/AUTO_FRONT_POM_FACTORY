@@ -1,39 +1,37 @@
 package com.ticketsystem.pages;
 
-import org.openqa.selenium.TimeoutException;
+import com.ticketsystem.utils.Constantes;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
-import org.openqa.selenium.support.CacheLookup;
 import org.openqa.selenium.support.FindBy;
-import org.openqa.selenium.support.ui.ExpectedConditions;
 
 public class RegisterPage extends BasePage {
 
-    private static final String PAGE_PATH = "/register";
-
-    @CacheLookup
-    @FindBy(css = ".auth-title")
+    @FindBy(css = Constantes.AUTH_TITLE)
     private WebElement pageTitle;
 
-    @FindBy(id = "username")
+    @FindBy(id = Constantes.INPUT_USERNAME)
     private WebElement usernameInput;
 
-    @FindBy(id = "email")
+    @FindBy(id = Constantes.INPUT_EMAIL)
     private WebElement emailInput;
 
-    @FindBy(id = "password")
+    @FindBy(id = Constantes.INPUT_PASSWORD)
     private WebElement passwordInput;
 
-    @FindBy(id = "confirmPassword")
+    @FindBy(id = Constantes.INPUT_CONFIRM_PASSWORD)
     private WebElement confirmPasswordInput;
 
-    @FindBy(css = "button[type='submit']")
+    @FindBy(css = Constantes.SUBMIT_BUTTON)
     private WebElement submitButton;
 
-    @FindBy(css = ".auth-error")
+    @FindBy(css = Constantes.SPINNER)
+    private WebElement spinner;
+
+    @FindBy(css = Constantes.AUTH_ERROR)
     private WebElement errorMessage;
 
-    @FindBy(css = ".btn-secondary")
+    @FindBy(css = Constantes.BTN_SECONDARY)
     private WebElement loginLink;
 
     public RegisterPage(WebDriver driver) {
@@ -41,16 +39,21 @@ public class RegisterPage extends BasePage {
     }
 
     public void navigateToRegisterPage(String baseUrl) {
-        navigateTo(baseUrl + PAGE_PATH);
+        navigateTo(baseUrl + Constantes.REGISTER);
+    }
+
+    public void waitUntilLoaded() {
+        waitForUrlToContain(Constantes.REGISTER);
+        waitForVisibility(pageTitle);
     }
 
     public String getPageTitle() {
-        wait.until(ExpectedConditions.visibilityOf(pageTitle));
+        waitForVisibility(pageTitle);
         return pageTitle.getText();
     }
 
     public void fillForm(String username, String email, String password, String confirmPassword) {
-        wait.until(ExpectedConditions.visibilityOf(usernameInput));
+        waitForVisibility(usernameInput);
         usernameInput.clear();
         usernameInput.sendKeys(username);
         emailInput.clear();
@@ -62,28 +65,42 @@ public class RegisterPage extends BasePage {
     }
 
     public void submit() {
-        wait.until(ExpectedConditions.elementToBeClickable(submitButton)).click();
+        waitForClickability(submitButton);
+        submitButton.click();
+    }
+
+    public void registerAs(String username, String email, String password, String confirmPassword) {
+        fillForm(username, email, password, confirmPassword);
+        submit();
+    }
+
+    public void waitForSpinnerToDisappear() {
+        waitForInvisibility(spinner);
     }
 
     public void waitForRedirectToTickets() {
-        waitForUrlToContain("/tickets");
+        waitForUrlToContain(Constantes.TICKETS);
     }
 
     public String getErrorText() {
-        wait.until(ExpectedConditions.visibilityOf(errorMessage));
+        waitForVisibility(errorMessage);
         return errorMessage.getText();
     }
 
     public boolean isErrorVisible() {
-        try {
-            wait.until(ExpectedConditions.visibilityOf(errorMessage));
-            return true;
-        } catch (TimeoutException e) {
-            return false;
-        }
+        return isVisible(errorMessage);
     }
 
     public void clickLoginLink() {
-        wait.until(ExpectedConditions.elementToBeClickable(loginLink)).click();
+        waitForClickability(loginLink);
+        loginLink.click();
+    }
+
+    public boolean isAtRegisterPage() {
+        return currentUrlContains(Constantes.REGISTER);
+    }
+
+    public boolean isAtTicketsPage() {
+        return currentUrlContains(Constantes.TICKETS);
     }
 }

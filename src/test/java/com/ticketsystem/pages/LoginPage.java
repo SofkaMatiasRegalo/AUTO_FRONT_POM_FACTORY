@@ -1,36 +1,31 @@
 package com.ticketsystem.pages;
 
-import org.openqa.selenium.TimeoutException;
+import com.ticketsystem.utils.Constantes;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
-import org.openqa.selenium.support.CacheLookup;
 import org.openqa.selenium.support.FindBy;
-import org.openqa.selenium.support.ui.ExpectedConditions;
 
 public class LoginPage extends BasePage {
 
-    private static final String PAGE_PATH = "/login";
-
-    @CacheLookup
-    @FindBy(css = ".auth-title")
+    @FindBy(css = Constantes.AUTH_TITLE)
     private WebElement pageTitle;
 
-    @FindBy(id = "email")
+    @FindBy(id = Constantes.INPUT_EMAIL)
     private WebElement emailInput;
 
-    @FindBy(id = "password")
+    @FindBy(id = Constantes.INPUT_PASSWORD)
     private WebElement passwordInput;
 
-    @FindBy(css = "button[type='submit']")
+    @FindBy(css = Constantes.SUBMIT_BUTTON)
     private WebElement submitButton;
 
-    @FindBy(css = ".auth-error")
+    @FindBy(css = Constantes.AUTH_ERROR)
     private WebElement errorMessage;
 
-    @FindBy(css = ".spinner")
+    @FindBy(css = Constantes.SPINNER)
     private WebElement spinner;
 
-    @FindBy(css = ".btn-secondary")
+    @FindBy(css = Constantes.BTN_SECONDARY)
     private WebElement registerLink;
 
     public LoginPage(WebDriver driver) {
@@ -38,16 +33,21 @@ public class LoginPage extends BasePage {
     }
 
     public void navigateToLoginPage(String baseUrl) {
-        navigateTo(baseUrl + PAGE_PATH);
+        navigateTo(baseUrl + Constantes.LOGIN);
+    }
+
+    public void waitUntilLoaded() {
+        waitForUrlToContain(Constantes.LOGIN);
+        waitForVisibility(pageTitle);
     }
 
     public String getPageTitle() {
-        wait.until(ExpectedConditions.visibilityOf(pageTitle));
+        waitForVisibility(pageTitle);
         return pageTitle.getText();
     }
 
     public void fillForm(String email, String password) {
-        wait.until(ExpectedConditions.visibilityOf(emailInput));
+        waitForVisibility(emailInput);
         emailInput.clear();
         emailInput.sendKeys(email);
         passwordInput.clear();
@@ -55,33 +55,47 @@ public class LoginPage extends BasePage {
     }
 
     public void submit() {
-        wait.until(ExpectedConditions.elementToBeClickable(submitButton)).click();
+        waitForClickability(submitButton);
+        submitButton.click();
+    }
+
+    public void loginAs(String email, String password) {
+        fillForm(email, password);
+        submit();
+    }
+
+    public void waitForSpinnerToDisappear() {
+        waitForInvisibility(spinner);
     }
 
     public void waitForRedirectToTickets() {
-        waitForUrlToContain("/tickets");
+        waitForUrlToContain(Constantes.TICKETS);
     }
 
     public String getErrorText() {
-        wait.until(ExpectedConditions.visibilityOf(errorMessage));
+        waitForVisibility(errorMessage);
         return errorMessage.getText();
     }
 
     public boolean isErrorVisible() {
-        try {
-            wait.until(ExpectedConditions.visibilityOf(errorMessage));
-            return true;
-        } catch (TimeoutException e) {
-            return false;
-        }
+        return isVisible(errorMessage);
     }
 
     public boolean isSubmitButtonEnabled() {
-        wait.until(ExpectedConditions.visibilityOf(submitButton));
+        waitForVisibility(submitButton);
         return submitButton.isEnabled();
     }
 
     public void clickRegisterLink() {
-        wait.until(ExpectedConditions.elementToBeClickable(registerLink)).click();
+        waitForClickability(registerLink);
+        registerLink.click();
+    }
+
+    public boolean isAtLoginPage() {
+        return currentUrlContains(Constantes.LOGIN);
+    }
+
+    public boolean isAtTicketsPage() {
+        return currentUrlContains(Constantes.TICKETS);
     }
 }
