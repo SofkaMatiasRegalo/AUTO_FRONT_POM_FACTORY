@@ -28,7 +28,10 @@ public class LoginStepDefinitions {
     @When("inicia sesion con credenciales validas")
     public void iniciaSesionConCredencialesValidas() {
         AuthScenarioContext context = AuthScenarioContext.get();
-        TestUsers.Credentials credentials = DataFactory.validLogin();
+        TestUsers.Credentials credentials = context.getLoginCredentials();
+        if (credentials == null) {
+            credentials = DataFactory.validLogin();
+        }
         context.setExpectedUsername(credentials.username);
 
         context.getLoginPage().loginAs(credentials.email, credentials.password);

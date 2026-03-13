@@ -2,13 +2,10 @@ package com.ticketsystem.stepdefinitions;
 
 import com.ticketsystem.config.TestConfig;
 import com.ticketsystem.stepdefinitions.support.AuthScenarioContext;
-import com.ticketsystem.utils.Constantes;
-import io.github.bonigarcia.wdm.WebDriverManager;
 import io.cucumber.java.After;
 import io.cucumber.java.Before;
+import net.thucydides.core.webdriver.ThucydidesWebDriverSupport;
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.chrome.ChromeDriver;
-import org.openqa.selenium.chrome.ChromeOptions;
 
 public class AuthHooks {
 
@@ -16,14 +13,10 @@ public class AuthHooks {
 
     @Before
     public void setUp() {
-        WebDriverManager.chromedriver().setup();
-
-        ChromeOptions options = new ChromeOptions();
         if (TestConfig.headless()) {
-            options.addArguments(Constantes.ARG_HEADLESS_NEW);
+            System.setProperty("headless.mode", "true");
         }
-
-        driver = new ChromeDriver(options);
+        driver = ThucydidesWebDriverSupport.getDriver();
         driver.manage().window().maximize();
 
         AuthScenarioContext.initialize(driver);
@@ -31,12 +24,6 @@ public class AuthHooks {
 
     @After
     public void tearDown() {
-        try {
-            if (driver != null) {
-                driver.quit();
-            }
-        } finally {
-            AuthScenarioContext.clear();
-        }
+        AuthScenarioContext.clear();
     }
 }

@@ -1,5 +1,6 @@
 package com.ticketsystem.stepdefinitions.support;
 
+import com.ticketsystem.data.TestUsers;
 import com.ticketsystem.factory.PageObjectFactory;
 import com.ticketsystem.pages.LoginPage;
 import com.ticketsystem.pages.NavBarComponent;
@@ -16,6 +17,7 @@ public final class AuthScenarioContext {
     private NavBarComponent navBar;
     private TicketListPage ticketListPage;
     private String expectedUsername;
+    private TestUsers.Credentials loginCredentials;
 
     private AuthScenarioContext() {
     }
@@ -66,5 +68,13 @@ public final class AuthScenarioContext {
 
     public void setExpectedUsername(String expectedUsername) {
         this.expectedUsername = expectedUsername;
+    }
+
+    public TestUsers.Credentials getLoginCredentials() {
+        return loginCredentials;
+    }
+
+    public void setLoginCredentials(TestUsers.Credentials loginCredentials) {
+        this.loginCredentials = loginCredentials;
     }
 }

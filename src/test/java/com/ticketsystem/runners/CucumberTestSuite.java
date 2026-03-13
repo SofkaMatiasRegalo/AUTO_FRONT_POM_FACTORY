@@ -1,19 +1,16 @@
 package com.ticketsystem.runners;
 
 import com.ticketsystem.utils.Constantes;
-import io.cucumber.junit.Cucumber;
 import io.cucumber.junit.CucumberOptions;
+import net.serenitybdd.cucumber.CucumberWithSerenity;
 import org.junit.runner.RunWith;
 
-@RunWith(Cucumber.class)
+@RunWith(CucumberWithSerenity.class)
 @CucumberOptions(
         features = {
-                Constantes.FEATURES_PATH + "/01_registro.feature",
-                Constantes.FEATURES_PATH + "/03_login.feature",
-                Constantes.FEATURES_PATH + "/02_cierre_sesion.feature"
+                Constantes.FEATURES_PATH + "/00_flujo_autenticacion_unificado.feature"
         },
-        glue = Constantes.GLUE,
-        plugin = {Constantes.PLUGIN_PRETTY}
+        glue = Constantes.GLUE
 )
 public class CucumberTestSuite {
 }

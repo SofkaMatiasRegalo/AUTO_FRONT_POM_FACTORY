@@ -30,7 +30,11 @@ public class RegistroStepDefinitions {
         AuthScenarioContext context = AuthScenarioContext.get();
         TestUsers.NewUser newUser = DataFactory.newUser();
         context.setExpectedUsername(newUser.username);
-        DataFactory.rememberRegisteredUser(newUser);
+        context.setLoginCredentials(new TestUsers.Credentials(
+                newUser.email,
+                newUser.password,
+                newUser.username
+        ));
 
         context.getRegisterPage().registerAs(newUser.username, newUser.email, newUser.password, newUser.confirmPassword);
     }
